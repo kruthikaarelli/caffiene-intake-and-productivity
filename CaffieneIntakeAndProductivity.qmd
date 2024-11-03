@@ -1,0 +1,78 @@
+---
+title: "AMOD5250-Assignment02"
+author: "Kruthika Arelli-0843068"
+format: pdf
+---
+# Exploratory Data Analysis of student behaviour data
+
+
+# Background of the Data
+
+The Student behaviour data consists of various habits of all the college students right from 1st year to 4th year students, the various attributes in the dataset are: Student_ID, Age, Gender, University_Year, sleep duration, study hour, screen time, caffeine intake, physical activity, Sleep quality, etc . We can make several hypothesis from the about data like sleep duration and quality,etc but I am analyzing the relation between caffeine intake and study hours because Caffeine is commonly used by students to increase alertness and sustain energy levels, particularly when preparing for academic work. However, its effect on study habits, particularly study hours, can vary, hence I want to analyze these trends.
+
+# Hypothesis
+
+Students with moderate caffeine intake show higher study efficiency compared to those with high caffeine intake
+
+
+# Analysis and Visualizations
+
+The main idea is to find the correlation between caffeine intake and study hours. we can use a bar plot to easily compare them.
+The supporting visualizations are:
+a box plot to Categorize caffeine intake into levels (e.g., Low, Medium, High) and show the distribution of study hours within each category, offering insight into how study hours vary by caffeine consumption.
+A line chart to depict the average study hours for each caffeine intake level.
+
+```{r}
+data <- read.csv("student_data.csv")
+head(data)
+```
+```{r}
+# Categorize Caffeine Intake
+data$Caffeine_Level <- cut(data$Caffeine_Intake,
+                           breaks = c(-Inf, 0, 3, Inf),
+                           labels = c("Low", "Medium", "High"))
+
+# Calculate Average Study Hours by Caffeine Level
+avg_study_hours <- tapply(data$Study_Hours, data$Caffeine_Level, mean, na.rm = TRUE)
+
+# Bar plot of Average Study Hours by Caffeine Level
+barplot(avg_study_hours,
+        main = "Average Study Hours by Caffeine Intake Level",
+        xlab = "Caffeine Intake Level",
+        ylab = "Average Study Hours",
+        col = c("pink", "skyblue", "salmon"),
+        border = "black")
+
+```
+```{r}
+data$Caffeine_Level <- cut(data$Caffeine_Intake,
+                           breaks = c(-Inf, 0, 3, Inf),
+                           labels = c("Low", "Medium", "High"))
+
+# Box plot of Study Hours grouped by Caffeine Level
+boxplot(Study_Hours ~ Caffeine_Level, data = data,
+        main = "Study Hours by Caffeine Intake Level",
+        xlab = "Caffeine Intake Level",
+        ylab = "Study Hours",
+        col = "lightblue")
+```
+
+```{r}
+avg_study_hours_caffeine <- tapply(data$Study_Hours, data$Caffeine_Intake, mean)
+
+# Plot the average study hours by caffeine intake level
+plot(names(avg_study_hours_caffeine), avg_study_hours_caffeine, type = "b",
+     main = "Average Study Hours by Caffeine Intake Level",
+     xlab = "Caffeine Intake Level",
+     ylab = "Average Study Hours",
+     col = "purple", pch = 19)
+```
+
+
+# Findings and Conclusions
+
+The average study hours for students consuming moderate levels of caffeine (identified as level 3) were significantly higher compared to those with low or very high intake. This suggests that moderate caffeine intake fosters an optimal environment for effective studying.
+
+The distribution of study hours within the moderate caffeine group displayed less variability and a higher median, reinforcing the idea that students who consume moderate amounts of caffeine tend to have more consistent and productive study sessions.
+
+The analysis indicated a clear upward trend, confirming that the optimal caffeine level identified is 3. This suggests that this level maximizes study hours, aligning with the expectation that moderate intake enhances focus and alertness.
